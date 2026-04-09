@@ -1,70 +1,62 @@
 class World {
   character = new Character();
-
   enemies = [new Chicken(), new Chicken(), new Chicken()];
-
-  cloud = [new Cloud(), new Cloud(), new Cloud()];
-
+  clouds = [new Cloud(),];
+  backgroundObjects = [
+    new BackgroundObject("img/5_background/layers/air.png", 0),
+    new BackgroundObject("img/5_background/layers/3_third_layer/1.png", 0),
+    new BackgroundObject("img/5_background/layers/2_second_layer/1.png", 0),
+    new BackgroundObject("img/5_background/layers/1_first_layer/1.png", 0),
+  ];
   canvas;
-
   ctx;
+  keyboard;
 
-  constructor(canvas) {
+  constructor(canvas, keyboard) {
     this.ctx = canvas.getContext("2d");
     this.canvas = canvas;
+    this.keyboard = keyboard;
     this.draw();
+    this.setWorld();
+  }
+
+  setWorld(){
+    this.character.world = this;
   }
 
   draw() {
-    // 1. Canvas leeren (altes Bild wegwischen)
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.addObjectsToMap(this.backgroundObjects);
 
-    // 2. Character zeichnen
-    this.ctx.drawImage(
-      this.character.img,
-      this.character.x,
-      this.character.y,
-      this.character.width,
-      this.character.height,
-    );
+    this.addToMap(this.character);
 
-    // 3. Jeden Gegner zeichnen
-    this.enemies.forEach((enemy) => {
-      this.ctx.drawImage(
-        enemy.img,
-        enemy.x,
-        enemy.y,
-        enemy.width,
-        enemy.height,
-      );
-    });
+    this.addObjectsToMap(this.clouds);
+    this.addObjectsToMap(this.enemies);
 
-    this.cloud.forEach((cloud) => {
-      this.ctx.drawImage(
-        cloud.img,
-        cloud.x,
-        cloud.y,
-        cloud.width,
-        cloud.height,
-      );
-    });
-
-    // for schleife = das gleiche wie bei foreach (vorherige schleife)
-
-    // for (let i = 0; i < this.enemies.length; i++) {
-    //   this.ctx.drawImage(
-    //     this.enemies[i].img,
-    //     this.enemies[i].x,
-    //     this.enemies[i].y,
-    //     this.enemies[i].width,
-    //     this.enemies[i].height,
-    //   );
-    // }
-
-    // Draw() wird immer wieder aufgerufen
     self = this;
     requestAnimationFrame(function () {
       self.draw();
     });
   }
+
+  addObjectsToMap(objects) {
+    objects.forEach((o) => {
+      this.addToMap(o);
+    });
+  }
+
+  addToMap(mo) {
+    if(mo.otherDirection){
+      this.ctx.save();
+      this.ctx.translate(mo.width, 0);
+      this.ctx.scale(-1,1);
+      mo.x = mo.x * -1;
+    }
+    this.ctx.drawImage(mo.img, mo.x, mo.y, mo.width, mo.height);
+    if (mo.otherDirection){
+      mo.x = mo.x * -1;
+      this.ctx.restore();
+    }
+  }
 }
+d
