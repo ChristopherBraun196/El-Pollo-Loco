@@ -14,20 +14,18 @@ class Chicken extends MovableObject {
 
     this.x = 300 + Math.random() * 500;
     this.y = 155 + (280 - 80); // = 355
-    this.speed = 0.15 + Math.random()* 0.25;
+    this.speed = 0.15 + Math.random() * 0.25;
 
     this.animate();
   }
 
   animate() {
-    this.moveLeft();
+    setInterval(() => {
+      this.x -= this.speed;
+    }, 1000 / 60);
 
     setInterval(() => {
-      let i = this.currentImage % this.IMAGES_WALKING.length; // let i = 0 % 6; 0, => Rest 1
-      // i = 0, 1, 2, 3, 4, 5, 6 , 0 (nicht 7!)!
-      let path = this.IMAGES_WALKING[i];
-      this.img = this.imageCache[path];
-      this.currentImage++;
+      this.playAnimation(this.IMAGES_WALKING);
     }, 200);
   }
 }
