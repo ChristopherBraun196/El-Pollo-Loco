@@ -18,7 +18,9 @@ window.addEventListener("keydown", (e) => {
     keyboard.LEFT = true;
   }
   if (e.key === " ") {
+    if (e.key === " " && !e.repeat) { // stopping alltime jumping 
     keyboard.SPACE = true;
+    }
   }
   if (e.key === "e") {
     keyboard.ATTACK = true;
