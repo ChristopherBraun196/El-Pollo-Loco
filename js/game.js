@@ -1,13 +1,18 @@
 let canvas;
 let world;
 let keyboard = new Keyboard();
+let gameStarted = false;
 
 function init() {
   canvas = document.getElementById("canvas");
   world = new World(canvas, keyboard);
 
-  console.log("My Character is", world.character);
-  console.log("My Enemies:", world.enemies);
+// let music = new Audio("assets/music/Background/background-music-loop.mp3");
+music.loop = true;
+music.volume = 0.03;
+music.play();
+  // console.log("My Character is", world.character);
+  // console.log("My Enemies:", world.enemies);
 }
 
 window.addEventListener("keydown", (e) => {
@@ -17,12 +22,10 @@ window.addEventListener("keydown", (e) => {
   if (e.key === "ArrowLeft" || e.key === "a") {
     keyboard.LEFT = true;
   }
-  if (e.key === " ") {
-    if (e.key === " " && !e.repeat) { // stopping alltime jumping 
+  if (e.key === " " && !e.repeat) {
     keyboard.SPACE = true;
-    }
   }
-  if (e.key === "e") {
+  if (e.key === "e" && !e.repeat) {
     keyboard.ATTACK = true;
   }
 });
