@@ -1,27 +1,6 @@
-class MovableObject {
-  /** @type {number} Horizontal position in pixels. */
-  x = 120;
-
-  /** @type {number} Vertical position in pixels. */
-  y = 235;
-
-  /** @type {HTMLImageElement} The current image to render. */
-  img;
-
-  /** @type {number} Height of the object in pixels. */
-  height = 200;
-
-  /** @type {number} Width of the object in pixels. */
-  width = 120;
-
+class MovableObject extends DrawableObject {
   /** @type {number} The vertical ground boundary for gravity clamping. */
   groundY = 235;
-
-  /** @type {Object} Cache of preloaded images keyed by path. */
-  imageCache = {};
-
-  /** @type {number} Index of the current animation frame. */
-  currentImage = 0;
 
   /** @type {number} Horizontal movement speed in pixels per frame. */
   speed = 0.15;
@@ -35,6 +14,7 @@ class MovableObject {
   /** @type {number} Gravity acceleration applied each frame. */
   acceleration = 2.7;
 
+  energy = 100;
   /**
    * Applies gravity by reducing speedY each frame and clamping to groundY.
    */
@@ -60,38 +40,33 @@ class MovableObject {
   }
 
   /**
-   * Loads a single image and sets it as the current image.
-   * @param {string} path - The path to the image file.
-   */
-  loadImage(path) {
-    this.img = new Image();
-    this.img.src = path;
-  }
-
-  /**
    * Draws a debug hitbox rectangle around the object if it is a Character or Chicken.
    * @param {CanvasRenderingContext2D} ctx - The canvas rendering context.
    */
-  drawFrame(ctx) {
-    if (this instanceof Character || this instanceof Chicken) {
-      ctx.beginPath();
-      ctx.lineWidth = 2;
-      ctx.strokeStyle = "blue";
-      ctx.rect(this.x, this.y, this.width, this.height);
-      ctx.stroke();
+ 
+  // character.isColliding (chicken);
+  isColliding(mo) {
+    return (
+      this.x + this.width > mo.x &&
+      this.y + this.height > mo.y &&
+      this.x < mo.x + mo.width &&
+      this.y < mo.y + mo.height
+    );
+  }
+  hit() {
+    this.energy -= 5;
+    if (this.energy < 0) {
+      this.energy = 0;
     }
+    this.lastHit = Date.now(); //fand ich interessanter als newDate().getTime() ist deutlich kürzer..
   }
 
-  /**
-   * Preloads an array of images into the image cache.
-   * @param {string[]} arr - Array of image paths to load.
-   */
-  loadImages(arr) {
-    arr.forEach((path) => {
-      let img = new Image();
-      img.src = path;
-      this.imageCache[path] = img;
-    });
+  isHurt() {
+    return Date.now() - this.lastHit < 1000;
+  }
+
+  isDead() {
+    return this.energy == 0;
   }
 
   /**

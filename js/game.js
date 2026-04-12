@@ -2,15 +2,16 @@ let canvas;
 let world;
 let keyboard = new Keyboard();
 let gameStarted = false;
+let gameOver = false;
 
 function init() {
   canvas = document.getElementById("canvas");
   world = new World(canvas, keyboard);
 
-// let music = new Audio("assets/music/Background/background-music-loop.mp3");
-music.loop = true;
-music.volume = 0.03;
-music.play();
+  // let music = new Audio("assets/music/Background/background-music-loop.mp3");
+  // music.loop = true;
+  // music.volume = 0.03;
+  // music.play();
   // console.log("My Character is", world.character);
   // console.log("My Enemies:", world.enemies);
 }

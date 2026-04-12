@@ -20,6 +20,9 @@ class Character extends MovableObject {
   /** @type {number} Timestamp of the last movement input. */
   lastMoveTime = Date.now();
 
+  /** @type {number} Current frame index of the death animation. */
+  deadImageIndex = 0;
+
   /** @type {string[]} Idle animation frames. */
   IMAGES_IDLE = [
     "img/2_character_pepe/1_idle/idle/I-1.png",
@@ -128,7 +131,16 @@ class Character extends MovableObject {
    * Selects the appropriate animation based on the character's current state.
    */
   handleAnimation() {
-    if (this.isAboveGround()) {
+    if (this.isDead()) {
+      if (this.deadImageIndex < this.IMAGES_DEAD.length) {
+        this.img = this.imageCache[this.IMAGES_DEAD[this.deadImageIndex]];
+        this.deadImageIndex++;
+      } else {
+        gameOver = true;
+      }
+    } else if (this.isHurt()) {
+      this.playAnimation(this.IMAGES_HURT);
+    } else if (this.isAboveGround()) {
       this.handleJumpAnimation();
     } else {
       this.handleGroundAnimation();
@@ -139,6 +151,7 @@ class Character extends MovableObject {
    * Delegates all keyboard inputs to their respective handler methods.
    */
   handleKeys() {
+    if (this.isDead()) return;
     this.handleMoveRight();
     this.handleMoveLeft();
     this.handleJump();

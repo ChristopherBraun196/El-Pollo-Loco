@@ -34,6 +34,11 @@ class World {
    */
   throwableObjects = [];
 
+  healthBar = new StatusBar(StatusBar.IMAGES_HEALTH, 10, 10);
+  bottleBar = new StatusBar(StatusBar.IMAGES_BOTTLE, 10, 60);
+  coinBar = new StatusBar(StatusBar.IMAGES_COIN, 10, 110);
+  bossBar = new StatusBar(StatusBar.IMAGES_FINALBOSS, 450, 10);
+
   /**
    * Creates a new World instance, sets up the canvas context and starts the game loop.
    * @param {HTMLCanvasElement} canvas - The canvas element to render on.
@@ -43,8 +48,10 @@ class World {
     this.ctx = canvas.getContext("2d");
     this.canvas = canvas;
     this.keyboard = keyboard;
+    this.bossBar.width = 250;
     this.setWorld();
     this.draw();
+    this.run();
   }
 
   /**
@@ -58,6 +65,24 @@ class World {
     });
   }
 
+  run() {
+    setInterval(() => {
+
+      this.checkCollisions();
+    }, 200);
+  }
+
+
+  checkCollisions(){
+     this.level.enemies.forEach((enemy) => {
+        if (this.character.isColliding(enemy) && !this.character.isDead()) {
+          this.character.hit();
+          this.healthBar.setPercentage(this.character.energy);
+          console.log("Collusion with Character", this.character.energy);
+        }
+      });
+  }
+
   /**
    * Clears and redraws all game objects on the canvas each frame.
    */
@@ -65,8 +90,19 @@ class World {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.ctx.translate(this.camera_x, 0);
     this.addObjectsToMap(this.level.backgroundObjects);
-    this.addToMap(this.character);
     this.addObjectsToMap(this.level.clouds);
+    this.ctx.translate(-this.camera_x, 0);
+    // -------------- Space for fixed objects -------------
+    this.addToMap(this.healthBar);
+    this.addToMap(this.bottleBar);
+    this.addToMap(this.coinBar);
+    let boss = this.level.enemies.find((e) => e instanceof Finalboss);
+    if (boss && boss.isActivated) {
+      this.addToMap(this.bossBar);
+    }
+    // -------------- Space for fixed objects -------------
+    this.ctx.translate(this.camera_x, 0);
+    this.addToMap(this.character);
     this.addObjectsToMap(this.level.enemies);
     this.addObjectsToMap(this.throwableObjects);
     this.ctx.translate(-this.camera_x, 0);

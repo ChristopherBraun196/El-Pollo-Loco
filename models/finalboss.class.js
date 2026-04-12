@@ -49,6 +49,10 @@ class Finalboss extends MovableObject {
    */
   animate() {
     setInterval(() => {
+      if (this.world && this.world.character.isDead()) {
+        this.playAnimation(this.IMAGES_ALERT);
+        return;
+      }
       if (this.world && Math.abs(this.x - this.world.character.x) < 300) {
         this.isActivated = true;
       }
