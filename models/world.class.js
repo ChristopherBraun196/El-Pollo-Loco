@@ -49,6 +49,9 @@ class World {
     this.canvas = canvas;
     this.keyboard = keyboard;
     this.bossBar.width = 250;
+    this.coinBar.setPercentage(0);
+    this.bottleBar.setPercentage(0);
+
     this.setWorld();
     this.draw();
     this.run();
@@ -68,17 +71,97 @@ class World {
   run() {
     setInterval(() => {
       this.checkCollisions();
-    }, 200);
+    }, 25);
   }
 
+  // checkCollisions() {
+  //   this.level.enemies.forEach((enemy) => {
+  //     if (this.character.isColliding(enemy) && !this.character.isDead()) {
+  //       this.character.hit();
+  //       this.healthBar.setPercentage(this.character.energy);
+  //       console.log("Collusion with Character", this.character.energy);
+  //     }
+  //   });
   checkCollisions() {
+    // 1. Enemies - von vorne (bereits drin)
     this.level.enemies.forEach((enemy) => {
-      if (this.character.isColliding(enemy) && !this.character.isDead()) {
-        this.character.hit();
-        this.healthBar.setPercentage(this.character.energy);
-        console.log("Collusion with Character", this.character.energy);
+      if (
+        this.character.isColliding(enemy) &&
+        !this.character.isDead() &&
+        !(enemy instanceof Finalboss)
+      ) {
+        const characterFeet =
+          this.character.y +
+          this.character.height -
+          this.character.offset.bottom;
+        const enemyHead = enemy.y + enemy.offset.top;
+        console.log(
+          "Feet:",
+          characterFeet,
+          "Head:",
+          enemyHead,
+          "speedY:",
+          this.character.speedY,
+        );
+        const enemyCenter = enemy.y + enemy.height / 2;
+        if (characterFeet < enemyCenter) {
+          console.log("Von oben! speedY:", this.character.speedY);
+          enemy.energy = 0;
+          this.level.enemies = this.level.enemies.filter((e) => !e.isDead());
+        } else if (!this.character.isHurt()) {
+          // 1. Von vorne → Charakter nimmt Schaden
+          this.character.hit();
+          this.healthBar.setPercentage(this.character.energy);
+          this.level.enemies = this.level.enemies.filter(
+            (enemy) => !enemy.isDead(),
+          );
+        }
+        this.level.bottles = this.level.bottles.filter((bottle) => {
+          if (this.character.isColliding(bottle)) {
+            this.character.bottles++;
+            this.bottleBar.setPercentage(this.character.bottles * 12.5);
+            return false;
+          }
+          return true;
+        });
       }
     });
+    // Finalboss trifft Character
+    let boss = this.level.enemies.find((e) => e instanceof Finalboss);
+    if (boss && this.character.isColliding(boss) && !this.character.isHurt()) {
+      this.character.hit();
+      this.healthBar.setPercentage(this.character.energy);
+    }
+
+    // 3. Coins einsammeln
+    this.level.coins = this.level.coins.filter((coin) => {
+      if (this.character.isColliding(coin)) {
+        this.character.coins++;
+        this.coinBar.setPercentage(this.character.coins * 20);
+        return false;
+      }
+      return true;
+    });
+
+    // 4. Flaschen einsammeln
+    this.level.bottles = this.level.bottles.filter((bottle) => {
+      if (this.character.isColliding(bottle)) {
+        this.character.bottles++;
+        this.bottleBar.setPercentage(this.character.bottles * 12.5);
+        return false;
+      }
+      return true;
+    });
+    // Bottle trifft Finalboss
+    this.throwableObjects.forEach((bottle) => {
+      let boss = this.level.enemies.find((e) => e instanceof Finalboss);
+      if (boss && bottle.isColliding(boss) && !bottle.splashing) {
+        boss.hit();
+        this.bossBar.setPercentage(boss.energy);
+        bottle.splashing = true;
+      }
+    });
+    this.throwableObjects = this.throwableObjects.filter((b) => !b.toDelete);
   }
 
   /**
@@ -89,6 +172,9 @@ class World {
     this.ctx.translate(this.camera_x, 0);
     this.addObjectsToMap(this.level.backgroundObjects);
     this.addObjectsToMap(this.level.clouds);
+    this.addObjectsToMap(this.level.coins);
+    this.addObjectsToMap(this.level.bottles);
+
     this.ctx.translate(-this.camera_x, 0);
     // -------------- Space for fixed objects -------------
     this.statusBars();

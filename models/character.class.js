@@ -23,6 +23,11 @@ class Character extends MovableObject {
   /** @type {number} Current frame index of the death animation. */
   deadImageIndex = 0;
 
+  offset = { top: 100, bottom: 10, left: 1, right: 1 };
+
+  coins = 0;
+  bottles = 0;
+
   /** @type {string[]} Idle animation frames. */
   IMAGES_IDLE = [
     "img/2_character_pepe/1_idle/idle/I-1.png",
@@ -123,6 +128,10 @@ class Character extends MovableObject {
    * Processes keyboard input and updates the camera position.
    */
   handleMovement() {
+    let boss =
+      this.world &&
+      this.world.level.enemies.find((e) => e instanceof Finalboss);
+    if (boss && boss.isDead()) return;
     this.handleKeys();
     this.updateCamera();
   }
@@ -208,13 +217,15 @@ class Character extends MovableObject {
    * Throws a bottle in the character's facing direction when E is pressed.
    */
   handleAttack() {
-    if (this.world.keyboard.ATTACK) {
+    if (this.world.keyboard.ATTACK && this.bottles > 0) {
       let bottle = new ThrowableObject(
         this.x + 20,
         this.y + 120,
         this.otherDirection,
       );
       this.world.throwableObjects.push(bottle);
+      this.bottles--;
+      this.world.bottleBar.setPercentage(this.bottles * 12.5);
       this.world.keyboard.ATTACK = false;
       this.lastMoveTime = Date.now();
       gameStarted = true;

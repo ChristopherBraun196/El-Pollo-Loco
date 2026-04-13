@@ -32,6 +32,18 @@ class Finalboss extends MovableObject {
     "img/4_enemie_boss_chicken/1_walk/G4.png",
   ];
 
+  IMAGES_HURT = [
+    "img/4_enemie_boss_chicken/4_hurt/G21.png",
+    "img/4_enemie_boss_chicken/4_hurt/G22.png",
+    "img/4_enemie_boss_chicken/4_hurt/G23.png",
+  ];
+
+  IMAGES_DEAD = [
+    "img/4_enemie_boss_chicken/5_dead/G24.png",
+    "img/4_enemie_boss_chicken/5_dead/G25.png",
+    "img/4_enemie_boss_chicken/5_dead/G26.png",
+  ];
+
   /**
    * Creates a new Finalboss instance, loads all animations and sets start position.
    */
@@ -39,6 +51,8 @@ class Finalboss extends MovableObject {
     super().loadImage(this.IMAGES_ALERT[0]);
     this.loadImages(this.IMAGES_ALERT);
     this.loadImages(this.IMAGES_WALKING);
+    this.loadImages(this.IMAGES_HURT);
+    this.loadImages(this.IMAGES_DEAD);
     this.x = 700 * 3.25 - 195;
     this.speed = 4;
     this.animate();
@@ -49,6 +63,19 @@ class Finalboss extends MovableObject {
    */
   animate() {
     setInterval(() => {
+      if (this.isDead()) {
+        if (this.currentImage < this.IMAGES_DEAD.length) {
+          this.playAnimation(this.IMAGES_DEAD);
+        } else {
+          this.img =
+            this.imageCache[this.IMAGES_DEAD[this.IMAGES_DEAD.length - 1]];
+        }
+        return;
+      }
+      if (this.isHurt()) {
+        this.playAnimation(this.IMAGES_HURT);
+        return;
+      }
       if (this.world && this.world.character.isDead()) {
         this.playAnimation(this.IMAGES_ALERT);
         return;
@@ -69,5 +96,10 @@ class Finalboss extends MovableObject {
         this.playAnimation(this.IMAGES_ALERT);
       }
     }, 200);
+  }
+
+  hit() {
+    this.energy -= 34;
+    if (this.energy < 0) this.energy = 0;
   }
 }

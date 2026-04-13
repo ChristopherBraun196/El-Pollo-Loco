@@ -1,6 +1,7 @@
 class Chicken extends MovableObject {
   width = 60;
   height = 60;
+  offset = { top: 1, bottom: 1, left: 2, right: 2 };
 
   /** @type {string[]} Walking animation frames. */
   IMAGES_WALKING = [
@@ -28,6 +29,7 @@ class Chicken extends MovableObject {
   animate() {
     setInterval(() => {
       if (!gameStarted || !this.world || this.world.character.isDead()) return;
+      if (this.isDead()) return; 
       if (this.world.character.x < this.x) {
         this.x -= this.speed;
         this.otherDirection = false;
