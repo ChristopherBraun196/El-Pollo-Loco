@@ -67,20 +67,18 @@ class World {
 
   run() {
     setInterval(() => {
-
       this.checkCollisions();
     }, 200);
   }
 
-
-  checkCollisions(){
-     this.level.enemies.forEach((enemy) => {
-        if (this.character.isColliding(enemy) && !this.character.isDead()) {
-          this.character.hit();
-          this.healthBar.setPercentage(this.character.energy);
-          console.log("Collusion with Character", this.character.energy);
-        }
-      });
+  checkCollisions() {
+    this.level.enemies.forEach((enemy) => {
+      if (this.character.isColliding(enemy) && !this.character.isDead()) {
+        this.character.hit();
+        this.healthBar.setPercentage(this.character.energy);
+        console.log("Collusion with Character", this.character.energy);
+      }
+    });
   }
 
   /**
@@ -93,13 +91,7 @@ class World {
     this.addObjectsToMap(this.level.clouds);
     this.ctx.translate(-this.camera_x, 0);
     // -------------- Space for fixed objects -------------
-    this.addToMap(this.healthBar);
-    this.addToMap(this.bottleBar);
-    this.addToMap(this.coinBar);
-    let boss = this.level.enemies.find((e) => e instanceof Finalboss);
-    if (boss && boss.isActivated) {
-      this.addToMap(this.bossBar);
-    }
+    this.statusBars();
     // -------------- Space for fixed objects -------------
     this.ctx.translate(this.camera_x, 0);
     this.addToMap(this.character);
@@ -111,6 +103,16 @@ class World {
     requestAnimationFrame(function () {
       self.draw();
     });
+  }
+
+  statusBars() {
+    this.addToMap(this.healthBar);
+    this.addToMap(this.bottleBar);
+    this.addToMap(this.coinBar);
+    let boss = this.level.enemies.find((e) => e instanceof Finalboss);
+    if (boss && boss.isActivated) {
+      this.addToMap(this.bossBar);
+    }
   }
 
   /**

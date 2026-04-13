@@ -45,3 +45,26 @@ window.addEventListener("keyup", (e) => {
     keyboard.ATTACK = false;
   }
 });
+
+function fullScreen() {
+  let fullscreen = document.getElementById("fullscreen");
+  enterFullscreen(fullscreen);
+}
+
+function enterFullscreen(element) {
+  if (element.requestFullscreen) {
+    element.requestFullscreen();
+  } else if (element.msRequestFullScreen) {
+    element.msRequestFullScreen();
+  } else if (element.webkitRequestFullScreen) {
+    element.webkitRequestFullScreen();
+  }
+}
+
+function exitFullScreen() {
+  if (document.exitFullscreen) {
+    document.exitFullscreen();
+  } else if (document.webkitExitFullscreen) {
+    document.webkitExitFullscreen();
+  }
+}

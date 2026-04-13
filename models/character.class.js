@@ -216,6 +216,8 @@ class Character extends MovableObject {
       );
       this.world.throwableObjects.push(bottle);
       this.world.keyboard.ATTACK = false;
+      this.lastMoveTime = Date.now();
+      gameStarted = true;
     }
   }
 
