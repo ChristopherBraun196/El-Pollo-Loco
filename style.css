@@ -37,3 +37,18 @@ canvas {
   box-shadow: o 8px 32px rgba(245, 214, 214, 0.6);
   border-radius: 8px;
 }
+
+#fullscreen {
+  position: relative;
+}
+
+#screen-game-over,
+#screen-you-win {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 720px;
+  height: 480px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.5);
+}

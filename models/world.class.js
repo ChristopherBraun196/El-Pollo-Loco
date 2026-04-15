@@ -69,19 +69,34 @@ class World {
   }
 
   run() {
-    setInterval(() => {
+    this.runInterval = setInterval(() => {
       this.checkCollisions();
+      this.checkGameEnd();
     }, 25);
   }
 
-  // checkCollisions() {
-  //   this.level.enemies.forEach((enemy) => {
-  //     if (this.character.isColliding(enemy) && !this.character.isDead()) {
-  //       this.character.hit();
-  //       this.healthBar.setPercentage(this.character.energy);
-  //       console.log("Collusion with Character", this.character.energy);
-  //     }
-  //   });
+  checkGameEnd() {
+    if (this.gameEnded) return;
+
+    if (this.character.isDead()) {
+      this.gameEnded = true;
+      setTimeout(() => {
+        clearInterval(this.runInterval);
+        document.getElementById("screen-game-over").style.display = "block";
+      }, 150);
+      return;
+    }
+
+    let boss = this.level.enemies.find((e) => e instanceof Finalboss);
+    if (boss && boss.isDead()) {
+      this.gameEnded = true;
+      setTimeout(() => {
+        clearInterval(this.runInterval);
+        document.getElementById("screen-you-win").style.display = "block";
+      }, 150);
+    }
+  }
+
   checkCollisions() {
     // 1. Enemies - von vorne (bereits drin)
     this.level.enemies.forEach((enemy) => {
