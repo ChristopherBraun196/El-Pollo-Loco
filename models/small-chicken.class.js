@@ -9,13 +9,18 @@ class SmallChicken extends MovableObject {
     "assets/img/3_enemies_chicken/chicken_small/1_walk/3_w.png",
   ];
 
+  IMAGES_DEAD = ["assets/img/3_enemies_chicken/chicken_small/2_dead/dead.png"];
+
   /**
    * Creates a new SmallChicken instance at a randomized position within the given base range.
    * @param {number} baseX - The base horizontal position for the small chicken.
    */
   constructor(baseX) {
-    super().loadImage("assets/img/3_enemies_chicken/chicken_small/1_walk/1_w.png");
+    super().loadImage(
+      "assets/img/3_enemies_chicken/chicken_small/1_walk/1_w.png",
+    );
     this.loadImages(this.IMAGES_WALKING);
+    this.loadImages(this.IMAGES_DEAD);
     this.x = baseX + Math.random() * 200;
     this.y = 155 + (280 - 30);
     this.speed = 0.3 + Math.random() * 0.4;
@@ -28,6 +33,7 @@ class SmallChicken extends MovableObject {
   animate() {
     setInterval(() => {
       if (!gameStarted || !this.world || this.world.character.isDead()) return;
+      if (this.isDead()) return;
       if (this.world.character.x < this.x) {
         this.x -= this.speed;
         this.otherDirection = false;
@@ -39,6 +45,10 @@ class SmallChicken extends MovableObject {
 
     setInterval(() => {
       if (!gameStarted || !this.world || this.world.character.isDead()) return;
+      if (this.isDead()) {
+        this.img = this.imageCache[this.IMAGES_DEAD[0]];
+        return;
+      }
       this.playAnimation(this.IMAGES_WALKING);
     }, 200);
   }

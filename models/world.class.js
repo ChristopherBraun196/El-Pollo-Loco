@@ -72,6 +72,7 @@ class World {
     this.runInterval = setInterval(() => {
       this.checkCollisions();
       this.checkGameEnd();
+      this.level.enemies = this.level.enemies.filter((e) => !e.toDelete);
     }, 25);
   }
 
@@ -120,11 +121,11 @@ class World {
         );
         const enemyCenter = enemy.y + enemy.height / 2;
         if (characterFeet < enemyCenter) {
-          console.log("Von oben! speedY:", this.character.speedY);
           enemy.energy = 0;
-          this.level.enemies = this.level.enemies.filter((e) => !e.isDead());
-        } else if (!this.character.isHurt()) {
-          // 1. Von vorne → Charakter nimmt Schaden
+          setTimeout(() => {
+            enemy.toDelete = true;
+          }, 500);
+        } else if (!this.character.isHurt() && !enemy.isDead()) {
           this.character.hit();
           this.healthBar.setPercentage(this.character.energy);
           this.level.enemies = this.level.enemies.filter(
