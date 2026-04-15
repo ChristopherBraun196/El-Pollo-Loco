@@ -3,18 +3,38 @@ let world;
 let keyboard = new Keyboard();
 let gameStarted = false;
 let gameOver = false;
+let soundMuted = true;
+let music;
 
 function init() {
   canvas = document.getElementById("canvas");
   world = new World(canvas, keyboard);
-
-  // let music = new Audio("assets/music/Background/background-music-loop.mp3");
-  // music.loop = true;
-  // music.volume = 0.03;
-  // music.play();
-  // console.log("My Character is", world.character);
-  // console.log("My Enemies:", world.enemies);
+  initMusic();
 }
+
+
+function toggleSound() {
+  soundMuted = !soundMuted;
+  let img = document.getElementById("muteIcon");
+  let text = document.getElementById("muteText");
+
+  if (soundMuted) {
+    music.pause();
+    img.src = "./assets/img/svg/no_sound.svg";
+    text.innerText = "Sound OFF";
+  } else {
+    music.play();
+    img.src = "./assets/img/svg/sound_on.svg";
+    text.innerText = "Sound ON";
+  }
+}
+
+function initMusic() {
+  music = new Audio("assets/music/Background/background-music-loop.mp3");
+  music.loop = true;
+  music.volume = 0.03;
+}
+
 
 window.addEventListener("keydown", (e) => {
   if (e.key === "ArrowRight" || e.key === "d") {
@@ -45,26 +65,3 @@ window.addEventListener("keyup", (e) => {
     keyboard.ATTACK = false;
   }
 });
-
-function fullScreen() {
-  let fullscreen = document.getElementById("fullscreen");
-  enterFullscreen(fullscreen);
-}
-
-function enterFullscreen(element) {
-  if (element.requestFullscreen) {
-    element.requestFullscreen();
-  } else if (element.msRequestFullScreen) {
-    element.msRequestFullScreen();
-  } else if (element.webkitRequestFullScreen) {
-    element.webkitRequestFullScreen();
-  }
-}
-
-function exitFullScreen() {
-  if (document.exitFullscreen) {
-    document.exitFullscreen();
-  } else if (document.webkitExitFullscreen) {
-    document.webkitExitFullscreen();
-  }
-}

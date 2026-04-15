@@ -5,9 +5,9 @@ class Chicken extends MovableObject {
 
   /** @type {string[]} Walking animation frames. */
   IMAGES_WALKING = [
-    "img/3_enemies_chicken/chicken_normal/1_walk/1_w.png",
-    "img/3_enemies_chicken/chicken_normal/1_walk/2_w.png",
-    "img/3_enemies_chicken/chicken_normal/1_walk/3_w.png",
+    "assets/img/3_enemies_chicken/chicken_normal/1_walk/1_w.png",
+    "assets/img/3_enemies_chicken/chicken_normal/1_walk/2_w.png",
+    "assets/img/3_enemies_chicken/chicken_normal/1_walk/3_w.png",
   ];
 
   /**
@@ -15,7 +15,7 @@ class Chicken extends MovableObject {
    * @param {number} baseX - The base horizontal position for the chicken.
    */
   constructor(baseX) {
-    super().loadImage("img/3_enemies_chicken/chicken_normal/1_walk/1_w.png");
+    super().loadImage("assets/img/3_enemies_chicken/chicken_normal/1_walk/1_w.png");
     this.loadImages(this.IMAGES_WALKING);
     this.x = baseX + Math.random() * 200;
     this.y = 155 + (280 - 60);

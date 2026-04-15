@@ -13,8 +13,9 @@ body {
   align-items: center;
   font-family: "Rye", serif;
   /* background: linear-gradient(to bottom, #87ceeb, #c8a97e); */
-  background-image: url("./assets/svg/Gemini_Generated_Image_vkctsfvkctsfvkct (3).png");
+  background-image: url("./assets/img/screens/Background.png");
   background-repeat: no-repeat;
+
   background-size: cover;
   min-height: 100vh;
 }
@@ -28,12 +29,39 @@ h1 {
 
 button {
   cursor: pointer;
+  font-family: "Rye";
+  border: none;
+  background-color: transparent;
+  align-items: center;
+  display: flex;
+  /* flex-direction: row; */
+  flex-direction: row-reverse;
+  font-size: 18px;
+  gap: 4px;
+}
+
+button:hover {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+}
+
+#modiBar {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  z-index: 2;
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 8px;
+  justify-content: space-evenly;
+}
+
+#muteIcon {
+  filter: brightness(0);
 }
 
 canvas {
   background-color: black;
-  width: 720px;
-  height: 480px;
   box-shadow: o 8px 32px rgba(245, 214, 214, 0.6);
   border-radius: 8px;
 }
@@ -51,4 +79,36 @@ canvas {
   height: 480px;
   border-radius: 8px;
   background: rgba(0, 0, 0, 0.5);
+}
+
+section {
+  width: 720px;
+}
+
+.key {
+  display: inline-block;
+  border: 2px solid rgb(0, 0, 0);
+  border-radius: 4px;
+  padding: 2px 8px;
+  min-width: 30px;
+  text-align: center;
+}
+
+.controls {
+  display: flex;
+  gap: 40px;
+  margin-inline: 140px;
+  gap: 100px;
+}
+
+.controls-group h3 {
+  margin-bottom: 8px;
+}
+
+.controls-group ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
