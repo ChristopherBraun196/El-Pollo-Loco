@@ -84,6 +84,9 @@ class World {
       setTimeout(() => {
         clearInterval(this.runInterval);
         document.getElementById("screen-game-over").style.display = "block";
+        document.getElementById("restartButton").style.display = "flex";
+        document.getElementById("homeButton").style.display = "flex";
+
       }, 150);
       return;
     }
@@ -94,6 +97,9 @@ class World {
       setTimeout(() => {
         clearInterval(this.runInterval);
         document.getElementById("screen-you-win").style.display = "block";
+        document.getElementById("restartButton").style.display = "flex";
+        document.getElementById("homeButton").style.display = "flex";
+
       }, 150);
     }
   }

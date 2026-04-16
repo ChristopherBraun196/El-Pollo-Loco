@@ -81,6 +81,15 @@ canvas {
   background: rgba(0, 0, 0, 0.5);
 }
 
+#start-screen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 720px;
+  height: 480px;
+  border-radius: 8px;
+}
+
 section {
   width: 720px;
 }
@@ -131,7 +140,7 @@ footer a {
   color: black;
 }
 
-footer a:hover{
+footer a:hover {
   background-color: rgba(0, 0, 0, 0.3);
   border-radius: 8px;
 }
@@ -140,4 +149,108 @@ footer nav {
   display: flex;
   gap: 20px;
   align-items: center;
+}
+
+dialog {
+  border: none;
+  border-radius: 12px;
+  padding: 24px;
+  max-width: 600px;
+  width: 90%;
+  margin: auto;
+  background-color: rgba(245, 230, 200, 0.97);
+  font-family: "Rye", serif;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+dialog h2 {
+  font-size: 22px;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+dialog h3 {
+  font-size: 18px;
+  margin-top: 12px;
+  margin-bottom: 4px;
+}
+
+dialog p {
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.dialog-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.dialog-content button {
+  align-self: flex-end;
+}
+
+dialog::backdrop {
+  background: rgba(0, 0, 0, 0.6);
+}
+
+#startButton,
+#restartButton {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+}
+
+#startButton img {
+  width: 80px;
+  height: 80px;
+  filter: brightness(0) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
+  transition: transform 0.2s;
+}
+
+#startButton img:hover,
+#restartButton img:hover {
+  transform: scale(1.1);
+}
+
+#restartButton img {
+  width: 60px;
+  height: 60px;
+}
+
+#restartButton {
+  display: none;
+  color: white;
+  font-size: 24px;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  left: 60%;
+}
+
+#restartButton img {
+  filter: brightness(0) invert(1) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
+  transition: transform 0.2s;
+}
+
+#homeButton {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 38%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+  color: white;
+  font-size: 24px;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+#homeButton img {
+  width: 60px;
+  height: 60px;
+  filter: brightness(0) invert(1) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
+  transition: transform 0.2s;
 }

@@ -28,6 +28,14 @@
       <canvas id="canvas" width="720" height="480"></canvas>
       <div>
         <img
+          id="start-screen"
+          src="./assets/img/screens/startscreen_1.png"
+          alt="Startscreen"
+        />
+        <button id="startButton" onclick="startGame()">
+          <img src="./assets/img/svg/play_circle.svg" alt="Start" />
+        </button>
+        <img
           id="screen-game-over"
           src="assets/img/screens/Game Over.png"
           style="display: none"
@@ -37,6 +45,10 @@
           src="assets/img/screens/You Win A.png"
           style="display: none"
         />
+        <button id="homeButton" onclick="goHome()"><img src="./assets/img/svg/home.svg" alt="home">Home</button>
+        <button id="restartButton" onclick="restartGame()">
+          <img src="./assets/img/svg/replay.svg" alt="restartGame" />Restart
+        </button>
       </div>
     </div>
     <section>
@@ -60,12 +72,13 @@
     </section>
     <footer>
       <nav>
-        <a href="http://">GitHub</a>
-        <a href="http://">Impressum</a>
+        <button onclick="openImpress()">Impressum</button>
       </nav>
       <p>Created by Christopher Braun 2026</p>
     </footer>
 
+    <dialog id="impressum"></dialog>
+    <script src="./script.js"></script>
     <script src="./models/drawable-object.class.js"></script>
     <script src="./models/moveable-object.class.js"></script>
     <script src="./models/throwable-object.class.js"></script>
