@@ -268,8 +268,11 @@ class Character extends MovableObject {
     if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
       this.playAnimation(this.IMAGES_WALKING);
     } else if (Date.now() - this.lastMoveTime > 15000) {
+      if (!soundMuted && snoringSound.paused) snoringSound.play();
       this.playAnimation(this.IMAGES_LONG_IDLE);
     } else {
+      snoringSound.pause();
+      snoringSound.currentTime = 0;
       this.playAnimation(this.IMAGES_IDLE);
     }
   }

@@ -86,7 +86,7 @@ class World {
         document.getElementById("screen-game-over").style.display = "block";
         document.getElementById("restartButton").style.display = "flex";
         document.getElementById("homeButton").style.display = "flex";
-
+        if (!soundMuted) loseSound.play();
       }, 150);
       return;
     }
@@ -99,7 +99,7 @@ class World {
         document.getElementById("screen-you-win").style.display = "block";
         document.getElementById("restartButton").style.display = "flex";
         document.getElementById("homeButton").style.display = "flex";
-
+        if (!soundMuted) winSound.play();
       }, 150);
     }
   }
@@ -134,6 +134,7 @@ class World {
         } else if (!this.character.isHurt() && !enemy.isDead()) {
           this.character.hit();
           this.healthBar.setPercentage(this.character.energy);
+          if (!soundMuted) hurtSound.play();
           this.level.enemies = this.level.enemies.filter(
             (enemy) => !enemy.isDead(),
           );
@@ -153,6 +154,7 @@ class World {
     if (boss && this.character.isColliding(boss) && !this.character.isHurt()) {
       this.character.hit();
       this.healthBar.setPercentage(this.character.energy);
+      if (!soundMuted) hurtSound.play();
     }
 
     // 3. Coins einsammeln
@@ -160,6 +162,9 @@ class World {
       if (this.character.isColliding(coin)) {
         this.character.coins++;
         this.coinBar.setPercentage(this.character.coins * 20);
+        if (!soundMuted) {      
+          coinSound.play();
+        }
         return false;
       }
       return true;
@@ -170,6 +175,9 @@ class World {
       if (this.character.isColliding(bottle)) {
         this.character.bottles++;
         this.bottleBar.setPercentage(this.character.bottles * 12.5);
+        if (!soundMuted) {
+          coinSound.play();
+        }
         return false;
       }
       return true;
@@ -179,7 +187,9 @@ class World {
       let boss = this.level.enemies.find((e) => e instanceof Finalboss);
       if (boss && bottle.isColliding(boss) && !bottle.splashing) {
         boss.hit();
+        if (!soundMuted) bossFightSound.play();
         this.bossBar.setPercentage(boss.energy);
+
         bottle.splashing = true;
       }
     });

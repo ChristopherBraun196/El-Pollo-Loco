@@ -4,7 +4,7 @@ function openImpress() {
 }
 
 function closeImpressum() {
-document.getElementById("impressum").close();
+  document.getElementById("impressum").close();
 }
 
 function impressumTemplate() {
@@ -63,14 +63,15 @@ function impressumTemplate() {
 }
 
 function startGame() {
+  document.activeElement.blur();
   document.getElementById("start-screen").style.display = "none";
   document.getElementById("startButton").style.display = "none";
 }
 
-function restartGame(){
-   location.reload(); 
+function restartGame() {
+  location.reload();
 }
 
-function goHome(){
-   location.reload(); 
+function goHome() {
+  location.reload();
 }

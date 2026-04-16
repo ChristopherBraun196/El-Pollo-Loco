@@ -46,6 +46,11 @@ class SmallChicken extends MovableObject {
     setInterval(() => {
       if (!gameStarted || !this.world || this.world.character.isDead()) return;
       if (this.isDead()) {
+        if (!soundMuted && !this.deathSoundPlayed) {
+          chickenDeadSound.currentTime = 0;
+          chickenDeadSound.play();
+          this.deathSoundPlayed = true;
+        }
         this.img = this.imageCache[this.IMAGES_DEAD[0]];
         return;
       }
