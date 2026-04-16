@@ -69,7 +69,14 @@ function startGame() {
 }
 
 function restartGame() {
-  location.reload();
+  window.location.href = window.location.pathname + "?restart=true";
+}
+
+function checkRestart() {
+  if (new URLSearchParams(window.location.search).get("restart")) {
+    startGame();
+    window.history.replaceState({}, "", window.location.pathname);
+  }
 }
 
 function goHome() {
