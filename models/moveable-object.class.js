@@ -14,7 +14,9 @@ class MovableObject extends DrawableObject {
   /** @type {number} Gravity acceleration applied each frame. */
   acceleration = 2.7;
 
+  /** @type {number} Current energy level. Starts at 100, minimum is 0. */
   energy = 100;
+
   /**
    * Applies gravity by reducing speedY each frame and clamping to groundY.
    */
@@ -40,19 +42,10 @@ class MovableObject extends DrawableObject {
   }
 
   /**
-   * Draws a debug hitbox rectangle around the object if it is a Character or Chicken.
-   * @param {CanvasRenderingContext2D} ctx - The canvas rendering context.
+   * Returns true if this object's hitbox overlaps with another object's hitbox.
+   * @param {MovableObject} mo - The other object to check against.
+   * @returns {boolean}
    */
-
-  // character.isColliding (chicken);
-  // isColliding(mo) {
-  //   return (
-  //     this.x + this.width > mo.x &&
-  //     this.y + this.height > mo.y &&
-  //     this.x < mo.x + mo.width &&
-  //     this.y < mo.y + mo.height
-  //   );
-  // }
   isColliding(mo) {
     return (
       this.x + this.width - this.offset.right > mo.x + mo.offset.left &&
@@ -62,18 +55,29 @@ class MovableObject extends DrawableObject {
     );
   }
 
+  /**
+   * Reduces energy by 5 and records the hit timestamp.
+   */
   hit() {
     this.energy -= 5;
     if (this.energy < 0) {
       this.energy = 0;
     }
-    this.lastHit = Date.now(); //fand ich interessanter als newDate().getTime() ist deutlich kürzer..
+    this.lastHit = Date.now();
   }
 
+  /**
+   * Returns true if the object was hit within the last second.
+   * @returns {boolean}
+   */
   isHurt() {
     return Date.now() - this.lastHit < 1000;
   }
 
+  /**
+   * Returns true if the object has no energy left.
+   * @returns {boolean}
+   */
   isDead() {
     return this.energy == 0;
   }

@@ -1,6 +1,11 @@
 class Finalboss extends MovableObject {
+  /** @type {number} Height of the boss in pixels. */
   height = 250;
+
+  /** @type {number} Width of the boss in pixels. */
   width = 150;
+
+  /** @type {number} Vertical start position on the canvas. */
   y = 215;
 
   /**
@@ -32,12 +37,14 @@ class Finalboss extends MovableObject {
     "assets/img/4_enemie_boss_chicken/1_walk/G4.png",
   ];
 
+  /** @type {string[]} Hurt animation frames. */
   IMAGES_HURT = [
     "assets/img/4_enemie_boss_chicken/4_hurt/G21.png",
     "assets/img/4_enemie_boss_chicken/4_hurt/G22.png",
     "assets/img/4_enemie_boss_chicken/4_hurt/G23.png",
   ];
 
+  /** @type {string[]} Death animation frames. */
   IMAGES_DEAD = [
     "assets/img/4_enemie_boss_chicken/5_dead/G24.png",
     "assets/img/4_enemie_boss_chicken/5_dead/G25.png",
@@ -62,42 +69,70 @@ class Finalboss extends MovableObject {
    * Starts the boss animation loop. Activates chase behavior when Pepe is within range.
    */
   animate() {
-    setInterval(() => {
-      if (this.isDead()) {
-        if (this.currentImage < this.IMAGES_DEAD.length) {
-          this.playAnimation(this.IMAGES_DEAD);
-        } else {
-          this.img =
-            this.imageCache[this.IMAGES_DEAD[this.IMAGES_DEAD.length - 1]];
-        }
-        return;
-      }
-      if (this.isHurt()) {
-        this.playAnimation(this.IMAGES_HURT);
-        return;
-      }
-      if (this.world && this.world.character.isDead()) {
-        this.playAnimation(this.IMAGES_ALERT);
-        return;
-      }
-      if (this.world && Math.abs(this.x - this.world.character.x) < 300) {
-        this.isActivated = true;
-      }
-      if (this.isActivated) {
-        if (this.world.character.x < this.x) {
-          this.x -= this.speed;
-          this.otherDirection = false;
-        } else {
-          this.x += this.speed;
-          this.otherDirection = true;
-        }
-        this.playAnimation(this.IMAGES_WALKING);
-      } else {
-        this.playAnimation(this.IMAGES_ALERT);
-      }
-    }, 200);
+    setInterval(() => this.handleBossAnimation(), 200);
   }
 
+  /**
+   * Runs the correct animation based on the boss's current state.
+   */
+  handleBossAnimation() {
+    if (this.isDead()) {
+      this.animateDead();
+      return;
+    }
+    if (this.isHurt()) {
+      this.playAnimation(this.IMAGES_HURT);
+      return;
+    }
+    if (this.world && this.world.character.isDead()) {
+      this.playAnimation(this.IMAGES_ALERT);
+      return;
+    }
+    this.checkActivation();
+    this.animateMovement();
+  }
+
+  /**
+   * Plays the death animation once and freezes on the last frame.
+   */
+  animateDead() {
+    if (this.currentImage < this.IMAGES_DEAD.length) {
+      this.playAnimation(this.IMAGES_DEAD);
+    } else {
+      this.img = this.imageCache[this.IMAGES_DEAD[this.IMAGES_DEAD.length - 1]];
+    }
+  }
+
+  /**
+   * Activates the boss when Pepe is within 300px.
+   */
+  checkActivation() {
+    if (this.world && Math.abs(this.x - this.world.character.x) < 300) {
+      this.isActivated = true;
+    }
+  }
+
+  /**
+   * Moves the boss toward Pepe and plays the walk animation.
+   */
+  animateMovement() {
+    if (this.isActivated) {
+      if (this.world.character.x < this.x) {
+        this.x -= this.speed;
+        this.otherDirection = false;
+      } else {
+        this.x += this.speed;
+        this.otherDirection = true;
+      }
+      this.playAnimation(this.IMAGES_WALKING);
+    } else {
+      this.playAnimation(this.IMAGES_ALERT);
+    }
+  }
+  
+  /**
+   * Reduces the boss's energy by 34. Minimum value is 0.
+   */
   hit() {
     this.energy -= 34;
     if (this.energy < 0) this.energy = 0;

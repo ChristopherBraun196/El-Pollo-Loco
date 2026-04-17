@@ -5,12 +5,10 @@ class ThrowableObject extends MovableObject {
   /** @type {number} Height of the bottle in pixels. */
   height = 60;
 
-  /**
-   * @type {string[]} Rotation animation frames played while the bottle is in flight.
-   */
-
+  /** @type {boolean} True while the bottle is playing the splash animation. */
   splashing = false;
 
+  /** @type {string[]} Rotation animation frames played while the bottle is in flight. */
   IMAGES_ROTATION = [
     "assets/img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png",
     "assets/img/6_salsa_bottle/bottle_rotation/2_bottle_rotation.png",
@@ -18,6 +16,7 @@ class ThrowableObject extends MovableObject {
     "assets/img/6_salsa_bottle/bottle_rotation/4_bottle_rotation.png",
   ];
 
+  /** @type {string[]} Splash animation frames played on impact. */
   IMAGES_SPLASH = [
     "assets/img/6_salsa_bottle/bottle_rotation/bottle_splash/1_bottle_splash.png",
     "assets/img/6_salsa_bottle/bottle_rotation/bottle_splash/2_bottle_splash.png",

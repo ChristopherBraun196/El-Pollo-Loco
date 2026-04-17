@@ -68,6 +68,9 @@ class World {
     });
   }
 
+  /**
+   * Starts the main game loop that checks collisions and cleans up dead enemies.
+   */
   run() {
     this.runInterval = setInterval(() => {
       this.checkCollisions();
@@ -76,124 +79,163 @@ class World {
     }, 25);
   }
 
+  /**
+   * Checks whether the game has ended by player death or boss death.
+   */
   checkGameEnd() {
     if (this.gameEnded) return;
-
-    if (this.character.isDead()) {
-      this.gameEnded = true;
-      setTimeout(() => {
-        clearInterval(this.runInterval);
-        document.getElementById("screen-game-over").style.display = "block";
-        document.getElementById("restartButton").style.display = "flex";
-        document.getElementById("homeButton").style.display = "flex";
-        if (!soundMuted) loseSound.play();
-      }, 150);
-      return;
-    }
-
+    if (this.character.isDead()) this.handlePlayerDead();
     let boss = this.level.enemies.find((e) => e instanceof Finalboss);
-    if (boss && boss.isDead()) {
-      this.gameEnded = true;
-      setTimeout(() => {
-        clearInterval(this.runInterval);
-        document.getElementById("screen-you-win").style.display = "block";
-        document.getElementById("restartButton").style.display = "flex";
-        document.getElementById("homeButton").style.display = "flex";
-        if (!soundMuted) winSound.play();
-      }, 150);
-    }
+    if (boss && boss.isDead()) this.handleBossDead();
   }
 
+  /**
+   * Triggers the game-over screen after the player dies.
+   */
+  handlePlayerDead() {
+    this.gameEnded = true;
+    setTimeout(() => this.showEndScreen("screen-game-over", loseSound), 150);
+  }
+
+  /**
+   * Triggers the win screen after the boss dies.
+   */
+  handleBossDead() {
+    this.gameEnded = true;
+    setTimeout(() => this.showEndScreen("screen-you-win", winSound), 150);
+  }
+
+  /**
+   * Stops the game loop and displays the end screen.
+   * @param {string} screenId - The DOM id of the screen to show.
+   * @param {HTMLAudioElement} sound - The sound to play.
+   */
+  showEndScreen(screenId, sound) {
+    clearInterval(this.runInterval);
+    document.getElementById(screenId).style.display = "block";
+    document.getElementById("restartButton").style.display = "flex";
+    document.getElementById("homeButton").style.display = "flex";
+    if (!soundMuted) sound.play();
+  }
+
+  /**
+   * Checks all collision types and removes deleted throwable objects.
+   */
   checkCollisions() {
-    // 1. Enemies - von vorne (bereits drin)
+    this.checkCollisionEnemies();
+    this.checkCollisionBoss();
+    this.checkCollisionCoins();
+    this.checkCollisionBottlesPickup();
+    this.checkCollisionBottlesThrown();
+    this.throwableObjects = this.throwableObjects.filter((b) => !b.toDelete);
+  }
+
+  /**
+   * Checks collisions between the character and normal enemies.
+   */
+  checkCollisionEnemies() {
     this.level.enemies.forEach((enemy) => {
       if (
         this.character.isColliding(enemy) &&
         !this.character.isDead() &&
         !(enemy instanceof Finalboss)
       ) {
-        const characterFeet =
-          this.character.y +
-          this.character.height -
-          this.character.offset.bottom;
-        const enemyHead = enemy.y + enemy.offset.top;
-        console.log(
-          "Feet:",
-          characterFeet,
-          "Head:",
-          enemyHead,
-          "speedY:",
-          this.character.speedY,
-        );
-        const enemyCenter = enemy.y + enemy.height / 2;
-        if (characterFeet < enemyCenter) {
-          enemy.energy = 0;
-          setTimeout(() => {
-            enemy.toDelete = true;
-          }, 500);
-        } else if (!this.character.isHurt() && !enemy.isDead()) {
-          this.character.hit();
-          this.healthBar.setPercentage(this.character.energy);
-          if (!soundMuted) hurtSound.play();
-          this.level.enemies = this.level.enemies.filter(
-            (enemy) => !enemy.isDead(),
-          );
-        }
-        this.level.bottles = this.level.bottles.filter((bottle) => {
-          if (this.character.isColliding(bottle)) {
-            this.character.bottles++;
-            this.bottleBar.setPercentage(this.character.bottles * 12.5);
-            return false;
-          }
-          return true;
-        });
+        this.handleEnemyHit(enemy);
       }
     });
-    // Finalboss trifft Character
+  }
+
+  /**
+   * Handles a collision: kills enemy if jumped on, otherwise damages the character.
+   * @param {MovableObject} enemy - The enemy that was hit.
+   */
+  handleEnemyHit(enemy) {
+    const characterFeet =
+      this.character.y + this.character.height - this.character.offset.bottom;
+    const enemyCenter = enemy.y + enemy.height / 2;
+    if (characterFeet < enemyCenter) {
+      this.killEnemy(enemy);
+    } else if (!this.character.isHurt() && !enemy.isDead()) {
+      this.damageCharacter();
+    }
+  }
+
+  /**
+   * Kills an enemy immediately and schedules its removal.
+   * @param {MovableObject} enemy - The enemy to kill.
+   */
+  killEnemy(enemy) {
+    enemy.energy = 0;
+    setTimeout(() => {
+      enemy.toDelete = true;
+    }, 500);
+  }
+
+  /**
+   * Damages the character and updates the health bar.
+   */
+  damageCharacter() {
+    this.character.hit();
+    this.healthBar.setPercentage(this.character.energy);
+    if (!soundMuted) hurtSound.play();
+    this.level.enemies = this.level.enemies.filter((enemy) => !enemy.isDead());
+  }
+
+  /**
+   * Checks collision between the character and the final boss.
+   */
+  checkCollisionBoss() {
     let boss = this.level.enemies.find((e) => e instanceof Finalboss);
     if (boss && this.character.isColliding(boss) && !this.character.isHurt()) {
       this.character.hit();
       this.healthBar.setPercentage(this.character.energy);
       if (!soundMuted) hurtSound.play();
     }
+  }
 
-    // 3. Coins einsammeln
+  /**
+   * Checks if the character collects any coins.
+   */
+  checkCollisionCoins() {
     this.level.coins = this.level.coins.filter((coin) => {
       if (this.character.isColliding(coin)) {
         this.character.coins++;
         this.coinBar.setPercentage(this.character.coins * 20);
-        if (!soundMuted) {      
-          coinSound.play();
-        }
+        if (!soundMuted) coinSound.play();
         return false;
       }
       return true;
     });
+  }
 
-    // 4. Flaschen einsammeln
+  /**
+   * Checks if the character picks up any bottles from the ground.
+   */
+  checkCollisionBottlesPickup() {
     this.level.bottles = this.level.bottles.filter((bottle) => {
       if (this.character.isColliding(bottle)) {
         this.character.bottles++;
         this.bottleBar.setPercentage(this.character.bottles * 12.5);
-        if (!soundMuted) {
-          coinSound.play();
-        }
+        if (!soundMuted) coinSound.play();
         return false;
       }
       return true;
     });
-    // Bottle trifft Finalboss
+  }
+
+  /**
+   * Checks if any thrown bottle hits the final boss.
+   */
+  checkCollisionBottlesThrown() {
+    let boss = this.level.enemies.find((e) => e instanceof Finalboss);
     this.throwableObjects.forEach((bottle) => {
-      let boss = this.level.enemies.find((e) => e instanceof Finalboss);
       if (boss && bottle.isColliding(boss) && !bottle.splashing) {
         boss.hit();
         if (!soundMuted) bossFightSound.play();
         this.bossBar.setPercentage(boss.energy);
-
         bottle.splashing = true;
       }
     });
-    this.throwableObjects = this.throwableObjects.filter((b) => !b.toDelete);
   }
 
   /**
@@ -206,7 +248,6 @@ class World {
     this.addObjectsToMap(this.level.clouds);
     this.addObjectsToMap(this.level.coins);
     this.addObjectsToMap(this.level.bottles);
-
     this.ctx.translate(-this.camera_x, 0);
     // -------------- Space for fixed objects -------------
     this.statusBars();
@@ -216,7 +257,7 @@ class World {
     this.addObjectsToMap(this.level.enemies);
     this.addObjectsToMap(this.throwableObjects);
     this.ctx.translate(-this.camera_x, 0);
-    self = this;
+    const self = this;
 
     requestAnimationFrame(function () {
       self.draw();
@@ -257,6 +298,5 @@ class World {
     } else {
       this.ctx.drawImage(mo.img, mo.x, mo.y, mo.width, mo.height);
     }
-    mo.drawFrame(this.ctx);
   }
 }

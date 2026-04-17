@@ -1,5 +1,8 @@
 class SmallChicken extends MovableObject {
+  /** @type {number} Width of the small chicken in pixels. */
   width = 30;
+
+  /** @type {number} Height of the small chicken in pixels. */
   height = 30;
 
   /** @type {string[]} Walking animation frames. */
@@ -9,6 +12,7 @@ class SmallChicken extends MovableObject {
     "assets/img/3_enemies_chicken/chicken_small/1_walk/3_w.png",
   ];
 
+  /** @type {string[]} Death animation frames. */
   IMAGES_DEAD = ["assets/img/3_enemies_chicken/chicken_small/2_dead/dead.png"];
 
   /**

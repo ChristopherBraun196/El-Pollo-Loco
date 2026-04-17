@@ -254,3 +254,160 @@ dialog::backdrop {
   filter: brightness(0) invert(1) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
   transition: transform 0.2s;
 }
+#lottie-rotate {
+  width: 200px;
+  height: 200px;
+}
+
+#rotate-overlay {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.9);
+  z-index: 9999;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  color: white;
+  font-size: 24px;
+}
+
+#touch-controls-left,
+#touch-controls-right {
+  display: none;
+}
+
+@media (orientation: landscape) and (pointer: coarse) {
+  section,
+  footer {
+    display: none;
+  }
+
+  #touch-controls {
+    display: contents;
+  }
+
+  #touch-controls-left {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    position: fixed;
+    bottom: 80px;
+    left: 10px;
+    z-index: 10;
+  }
+
+  #touch-controls-right {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    position: fixed;
+    bottom: 80px;
+    right: 10px;
+    z-index: 10;
+  }
+
+  #touch-controls-left button,
+  #touch-controls-right button {
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 16px;
+    padding: 20px 35px;
+    color: white;
+    font-size: 28px;
+    font-family: "Rye";
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    width: 140px;
+    justify-content: center;
+  }
+}
+
+@media (orientation: portrait) and (pointer: coarse) {
+  #rotate-overlay {
+    display: flex;
+  }
+}
+
+@media (max-width: 1100px) {
+  #touch-controls-left button,
+  #touch-controls-right button {
+    width: 120px;
+  }
+
+  dialog p {
+    line-height: 1.3;
+  }
+}
+
+@media (orientation: landscape) and (pointer: coarse) and (max-height: 500px) {
+  h1 {
+    display: none;
+  }
+
+  body {
+    overflow: hidden;
+  }
+
+  #fullscreen {
+    width: 100vw;
+    height: 100vh;
+  }
+
+  canvas {
+    width: 100vw;
+    height: 100vh;
+  }
+
+  #screen-game-over,
+  #screen-you-win,
+  #start-screen {
+    width: 100vw;
+    height: 100vh;
+  }
+
+  #touch-controls-left,
+  #touch-controls-right {
+    bottom: 10px;
+  }
+}
+
+@media (orientation: portrait) and (pointer: coarse) and (max-width: 500px) {
+  h1 {
+    font-size: 28px;
+    margin-top: 20px;
+    text-align: center;
+    width: 100%;
+  }
+
+  section {
+    width: 100%;
+  }
+
+  #fullscreen {
+    width: 100%;
+  }
+
+  #screen-game-over,
+  #screen-you-win,
+  #start-screen {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 720 / 480;
+  }
+
+  canvas {
+    width: 100%;
+    aspect-ratio: 720 / 480;
+  }
+
+  .controls {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  footer {
+    font-size: 14px;
+  }
+}

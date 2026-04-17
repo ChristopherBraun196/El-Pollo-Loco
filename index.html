@@ -11,11 +11,17 @@
     />
     <link rel="stylesheet" href="./style.css" />
   </head>
-  <body onload="init(); checkRestart();">
-
+  <body
+    onload="init(); checkRestart();rotateScreen();">
+    
     <h1>El Pollo Loco</h1>
 
     <div id="fullscreen">
+      <div id="rotate-overlay">
+        <div id="lottie-rotate"></div>
+        <p>Bitte drehe dein Gerät</p>
+      </div>
+
       <div id="modiBar">
         <button id="muteButton" onclick="toggleSound()">
           <img
@@ -26,8 +32,21 @@
           <span id="muteText">SOUND OFF</span>
         </button>
       </div>
+
       <canvas id="canvas" width="720" height="480"></canvas>
-      <div>
+
+      <div id="touch-controls">
+        <div id="touch-controls-left">
+          <button>&#8592;</button>
+          <button>&#8594;</button>
+        </div>
+        <div id="touch-controls-right">
+          <button>Jump</button>
+          <button>Attack</button>
+        </div>
+      </div>
+
+      <div id="game-screens">
         <img
           id="start-screen"
           src="./assets/img/screens/startscreen_1.png"
@@ -46,12 +65,15 @@
           src="assets/img/screens/You Win A.png"
           style="display: none"
         />
-        <button id="homeButton" onclick="goHome()"><img src="./assets/img/svg/home.svg" alt="home">Home</button>
+        <button id="homeButton" onclick="goHome()">
+          <img src="./assets/img/svg/home.svg" alt="home" />Home
+        </button>
         <button id="restartButton" onclick="restartGame()">
           <img src="./assets/img/svg/replay.svg" alt="restartGame" />Restart
         </button>
       </div>
     </div>
+
     <section>
       <div class="controls">
         <div class="controls-group">
@@ -79,6 +101,7 @@
     </footer>
 
     <dialog id="impressum"></dialog>
+    <script src="./js/lottie.min.js"></script>
     <script src="./script.js"></script>
     <script src="./models/drawable-object.class.js"></script>
     <script src="./models/moveable-object.class.js"></script>

@@ -23,9 +23,13 @@ class Character extends MovableObject {
   /** @type {number} Current frame index of the death animation. */
   deadImageIndex = 0;
 
+  /** @type {{top: number, bottom: number, left: number, right: number}} Hitbox offsets. */
   offset = { top: 100, bottom: 10, left: 1, right: 1 };
 
+  /** @type {number} Number of coins collected. */
   coins = 0;
+
+  /** @type {number} Number of bottles collected. */
   bottles = 0;
 
   /** @type {string[]} Idle animation frames. */
@@ -145,7 +149,6 @@ class Character extends MovableObject {
         this.img = this.imageCache[this.IMAGES_DEAD[this.deadImageIndex]];
         this.deadImageIndex++;
       } else {
-        gameOver = true;
       }
     } else if (this.isHurt()) {
       this.playAnimation(this.IMAGES_HURT);
@@ -240,24 +243,37 @@ class Character extends MovableObject {
    */
   handleJumpAnimation() {
     if (this.speedY > 0) {
-      if (!this.wasGoingUp) {
-        this.jumpImageIndex = 0;
-        this.wasGoingUp = true;
-      }
-      if (this.jumpImageIndex < this.IMAGES_JUMPING_UP.length) {
-        this.img = this.imageCache[this.IMAGES_JUMPING_UP[this.jumpImageIndex]];
-        this.jumpImageIndex++;
-      }
+      this.handleJumpUp();
     } else {
-      if (this.wasGoingUp) {
-        this.jumpImageIndex = 0;
-        this.wasGoingUp = false;
-      }
-      if (this.jumpImageIndex < this.IMAGES_JUMPING_DOWN.length) {
-        this.img =
-          this.imageCache[this.IMAGES_JUMPING_DOWN[this.jumpImageIndex]];
-        this.jumpImageIndex++;
-      }
+      this.handleJumpDown();
+    }
+  }
+
+  /**
+   * Advances the ascending jump animation frame by frame.
+   */
+  handleJumpUp() {
+    if (!this.wasGoingUp) {
+      this.jumpImageIndex = 0;
+      this.wasGoingUp = true;
+    }
+    if (this.jumpImageIndex < this.IMAGES_JUMPING_UP.length) {
+      this.img = this.imageCache[this.IMAGES_JUMPING_UP[this.jumpImageIndex]];
+      this.jumpImageIndex++;
+    }
+  }
+
+  /**
+   * Advances the descending jump animation frame by frame.
+   */
+  handleJumpDown() {
+    if (this.wasGoingUp) {
+      this.jumpImageIndex = 0;
+      this.wasGoingUp = false;
+    }
+    if (this.jumpImageIndex < this.IMAGES_JUMPING_DOWN.length) {
+      this.img = this.imageCache[this.IMAGES_JUMPING_DOWN[this.jumpImageIndex]];
+      this.jumpImageIndex++;
     }
   }
 

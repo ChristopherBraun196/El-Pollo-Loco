@@ -1,6 +1,11 @@
 class Chicken extends MovableObject {
+  /** @type {number} Width of the chicken in pixels. */
   width = 60;
+
+  /** @type {number} Height of the chicken in pixels. */
   height = 60;
+
+  /** @type {{top: number, bottom: number, left: number, right: number}} Hitbox offsets. */
   offset = { top: 1, bottom: 1, left: 2, right: 2 };
 
   /** @type {string[]} Walking animation frames. */
@@ -10,6 +15,7 @@ class Chicken extends MovableObject {
     "assets/img/3_enemies_chicken/chicken_normal/1_walk/3_w.png",
   ];
 
+  /** @type {string[]} Death animation frames. */
   IMAGES_DEAD = ["assets/img/3_enemies_chicken/chicken_normal/2_dead/dead.png"];
 
   /**

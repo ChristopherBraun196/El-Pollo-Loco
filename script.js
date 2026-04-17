@@ -1,12 +1,22 @@
+/**
+ * Loads the imprint template and opens the dialog.
+ */
 function openImpress() {
   document.getElementById("impressum").innerHTML = impressumTemplate();
   document.getElementById("impressum").showModal();
 }
 
+/**
+ * Closes the imprint dialog.
+ */
 function closeImpressum() {
   document.getElementById("impressum").close();
 }
 
+/**
+ * Returns the HTML content of the imprint dialog.
+ * @returns {string} HTML string of the imprint.
+ */
 function impressumTemplate() {
   return `
   <div class="dialog-content">
@@ -62,16 +72,25 @@ function impressumTemplate() {
     `;
 }
 
+/**
+ * Hides the start screen and starts the game.
+ */
 function startGame() {
   document.activeElement.blur();
   document.getElementById("start-screen").style.display = "none";
   document.getElementById("startButton").style.display = "none";
 }
 
+/**
+ * Reloads the page and starts the game directly via URL parameter.
+ */
 function restartGame() {
   window.location.href = window.location.pathname + "?restart=true";
 }
 
+/**
+ * Checks if a restart was triggered via URL parameter and starts the game directly.
+ */
 function checkRestart() {
   if (new URLSearchParams(window.location.search).get("restart")) {
     startGame();
@@ -79,6 +98,22 @@ function checkRestart() {
   }
 }
 
+/**
+ * Reloads the page and shows the start screen.
+ */
 function goHome() {
   location.reload();
+}
+
+/**
+ * Loads the Lottie animation for the rotate hint overlay.
+ */
+function rotateScreen() {
+  lottie.loadAnimation({
+    container: document.getElementById("lottie-rotate"),
+    renderer: "svg",
+    loop: true,
+    autoplay: true,
+    path: "./assets/img/screens/Rotate Phone.json",
+  });
 }
