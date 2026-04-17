@@ -73,6 +73,7 @@ class World {
    */
   run() {
     this.runInterval = setInterval(() => {
+      if (!gameStarted) return;
       this.checkCollisions();
       this.checkGameEnd();
       this.level.enemies = this.level.enemies.filter((e) => !e.toDelete);

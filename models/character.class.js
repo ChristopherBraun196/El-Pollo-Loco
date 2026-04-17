@@ -132,6 +132,7 @@ class Character extends MovableObject {
    * Processes keyboard input and updates the camera position.
    */
   handleMovement() {
+    if (!gameStarted) return;
     let boss =
       this.world &&
       this.world.level.enemies.find((e) => e instanceof Finalboss);
@@ -194,7 +195,6 @@ class Character extends MovableObject {
     if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
       this.moveRight();
       this.lastMoveTime = Date.now();
-      gameStarted = true;
     }
   }
 
@@ -205,7 +205,6 @@ class Character extends MovableObject {
     if (this.world.keyboard.LEFT && this.x > 0) {
       this.moveLeft();
       this.lastMoveTime = Date.now();
-      gameStarted = true;
     }
   }
   /**
@@ -234,7 +233,6 @@ class Character extends MovableObject {
       this.world.bottleBar.setPercentage(this.bottles * 12.5);
       this.world.keyboard.ATTACK = false;
       this.lastMoveTime = Date.now();
-      gameStarted = true;
     }
   }
 

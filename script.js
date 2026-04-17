@@ -76,6 +76,7 @@ function impressumTemplate() {
  * Hides the start screen and starts the game.
  */
 function startGame() {
+  gameStarted = true;
   document.activeElement.blur();
   document.getElementById("start-screen").style.display = "none";
   document.getElementById("startButton").style.display = "none";
