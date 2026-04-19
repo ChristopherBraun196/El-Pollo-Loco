@@ -32,6 +32,9 @@ class Character extends MovableObject {
   /** @type {number} Number of bottles collected. */
   bottles = 0;
 
+  /** @type {number} Timestamp of the last thrown bottle. */
+  lastThrow = 0;
+
   /** @type {string[]} Idle animation frames. */
   IMAGES_IDLE = [
     "assets/img/2_character_pepe/1_idle/idle/I-1.png",
@@ -124,8 +127,8 @@ class Character extends MovableObject {
    * Starts all animation and movement intervals for the character.
    */
   animate() {
-    setInterval(() => this.handleMovement(), 1000 / 60);
-    setInterval(() => this.handleAnimation(), 130);
+    this.movementInterval = setInterval(() => this.handleMovement(), 1000 / 60);
+    this.animationInterval = setInterval(() => this.handleAnimation(), 130);
   }
 
   /**
@@ -145,6 +148,7 @@ class Character extends MovableObject {
    * Selects the appropriate animation based on the character's current state.
    */
   handleAnimation() {
+    if (!gameStarted) return;
     if (this.isDead()) {
       if (this.deadImageIndex < this.IMAGES_DEAD.length) {
         this.img = this.imageCache[this.IMAGES_DEAD[this.deadImageIndex]];
@@ -222,7 +226,7 @@ class Character extends MovableObject {
    * Throws a bottle in the character's facing direction when E is pressed.
    */
   handleAttack() {
-    if (this.world.keyboard.ATTACK && this.bottles > 0) {
+    if (this.world.keyboard.ATTACK && this.bottles > 0 && Date.now() - this.lastThrow > 800) {
       let bottle = new ThrowableObject(
         this.x + 20,
         this.y + 120,
@@ -232,6 +236,7 @@ class Character extends MovableObject {
       this.bottles -= 0.5;
       this.world.bottleBar.setPercentage(this.bottles * 12.5);
       this.world.keyboard.ATTACK = false;
+      this.lastThrow = Date.now();
       this.lastMoveTime = Date.now();
     }
   }

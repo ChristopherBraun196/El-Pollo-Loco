@@ -95,7 +95,7 @@ function restartGame() {
   document.getElementById("screen-you-win").style.display = "none";
   document.getElementById("restartButton").style.display = "none";
   document.getElementById("homeButton").style.display = "none";
-  gameStarted = false;
+  gameStarted = true;
   if (!soundMuted) music.play();
 }
 

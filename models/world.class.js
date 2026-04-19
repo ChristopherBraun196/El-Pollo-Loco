@@ -268,6 +268,11 @@ class World {
   stop() {
     clearInterval(this.runInterval);
     cancelAnimationFrame(this.animationFrameId);
+    clearInterval(this.character.movementInterval);
+    clearInterval(this.character.gravity);
+    clearInterval(this.character.animationInterval);
+    let boss = this.level.enemies.find((e) => e instanceof Finalboss);
+    if (boss) clearInterval(boss.bossInterval);
   }
 
   statusBars() {

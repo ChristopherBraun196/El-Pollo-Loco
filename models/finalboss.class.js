@@ -61,7 +61,7 @@ class Finalboss extends MovableObject {
     this.loadImages(this.IMAGES_HURT);
     this.loadImages(this.IMAGES_DEAD);
     this.x = 700 * 3.25 - 195;
-    this.speed = 4;
+    this.speed = 10;
     this.animate();
   }
 
@@ -69,7 +69,7 @@ class Finalboss extends MovableObject {
    * Starts the boss animation loop. Activates chase behavior when Pepe is within range.
    */
   animate() {
-    setInterval(() => this.handleBossAnimation(), 200);
+   this.bossInterval = setInterval(() => this.handleBossAnimation(), 200);
   }
 
   /**
@@ -104,7 +104,7 @@ class Finalboss extends MovableObject {
   }
 
   /**
-   * Activates the boss when Pepe is within 300px.
+   * Activates the boss when Pepe is within 500px.
    */
   checkActivation() {
     if (this.world && Math.abs(this.x - this.world.character.x) < 500) {
@@ -131,7 +131,7 @@ class Finalboss extends MovableObject {
   }
   
   /**
-   * Reduces the boss's energy by 34. Minimum value is 0.
+   * Reduces the boss's energy by 14. Minimum value is 0.
    */
   hit() {
     this.energy -= 14;

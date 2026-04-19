@@ -1,4 +1,8 @@
 
+/**
+ * Creates and returns all enemies for level 1.
+ * @returns {MovableObject[]} Array of chickens, small chickens, and the final boss.
+ */
 function createEnemies() {
   const chickens = [300, 600, 900, 1200, 1500, 1800].map((x) => new Chicken(x));
   const smalls = [400, 700, 1000, 1300, 1600, 1900].map(
@@ -7,6 +11,10 @@ function createEnemies() {
   return [...chickens, ...smalls, new Finalboss()];
 }
 
+/**
+ * Creates and returns all background objects for level 1.
+ * @returns {BackgroundObject[]} Array of layered background tiles.
+ */
 function createBackgroundObjects() {
   const objects = [];
   for (let i = -1; i < 4; i++) {
@@ -36,6 +44,10 @@ function createBackgroundObjects() {
   return objects;
 }
 
+/**
+ * Creates and returns a new Level 1 instance with all game objects.
+ * @returns {Level} The fully populated level 1.
+ */
 function createLevel1() {
   const clouds = [
     new Cloud(200),
