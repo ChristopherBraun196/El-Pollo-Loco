@@ -154,7 +154,7 @@ class World {
     const characterFeet =
       this.character.y + this.character.height - this.character.offset.bottom;
     const enemyCenter = enemy.y + enemy.height / 2;
-    if (characterFeet < enemyCenter) {
+    if (characterFeet < enemyCenter && this.character.speedY < 0) {
       this.killEnemy(enemy);
     } else if (!this.character.isHurt() && !enemy.isDead()) {
       this.damageCharacter();
@@ -304,6 +304,5 @@ class World {
     } else {
       this.ctx.drawImage(mo.img, mo.x, mo.y, mo.width, mo.height);
     }
-    // mo.drawFrame(this.ctx);
   }
 }
