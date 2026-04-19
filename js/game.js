@@ -208,7 +208,6 @@ function initTouchAttack() {
 }
 
 window.addEventListener("keydown", (e) => {
-  gameStarted = true;
   if (e.key === "ArrowRight" || e.key === "d") {
     keyboard.RIGHT = true;
   }

@@ -76,6 +76,7 @@ function impressumTemplate() {
  * Hides the start screen and starts the game.
  */
 function startGame() {
+  gameStarted = true;
   canvas.focus();
   if (!soundMuted) music.play();
   document.getElementById("start-screen").style.display = "none";
