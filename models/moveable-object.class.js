@@ -59,7 +59,7 @@ class MovableObject extends DrawableObject {
    * Reduces energy by 5 and records the hit timestamp.
    */
   hit() {
-    this.energy -= 5;
+    this.energy -= 20;
     if (this.energy < 0) {
       this.energy = 0;
     }
@@ -71,7 +71,7 @@ class MovableObject extends DrawableObject {
    * @returns {boolean}
    */
   isHurt() {
-    return Date.now() - this.lastHit < 1000;
+    return Date.now() - this.lastHit < 500;
   }
 
   /**

@@ -168,7 +168,7 @@ function initTouchLeft() {
     gameStarted = true;
     keyboard.LEFT = true;
   });
-   btn.addEventListener("touchend", () => (keyboard.LEFT = false));
+  btn.addEventListener("touchend", () => (keyboard.LEFT = false));
 }
 
 /**
@@ -182,7 +182,7 @@ function initTouchRight() {
     gameStarted = true;
     keyboard.RIGHT = true;
   });
-   btn.addEventListener("touchend", () => (keyboard.RIGHT = false));
+  btn.addEventListener("touchend", () => (keyboard.RIGHT = false));
 }
 
 /**
@@ -196,7 +196,6 @@ function initTouchJump() {
     gameStarted = true;
     keyboard.SPACE = true;
   });
-   btn.addEventListener("touchend", () => (keyboard.SPACE = false));
 }
 
 /**

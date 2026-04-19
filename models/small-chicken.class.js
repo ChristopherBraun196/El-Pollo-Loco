@@ -5,6 +5,10 @@ class SmallChicken extends MovableObject {
   /** @type {number} Height of the small chicken in pixels. */
   height = 30;
 
+
+  /** @type {{top: number, bottom: number, left: number, right: number}} Hitbox offsets. */
+  offset = { top: 1, bottom: 1, left: 1, right: 1 }
+
   /** @type {string[]} Walking animation frames. */
   IMAGES_WALKING = [
     "assets/img/3_enemies_chicken/chicken_small/1_walk/1_w.png",

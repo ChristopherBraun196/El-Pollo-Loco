@@ -226,7 +226,7 @@ class Character extends MovableObject {
    * Throws a bottle in the character's facing direction when E is pressed.
    */
   handleAttack() {
-    if (this.world.keyboard.ATTACK && this.bottles > 0 && Date.now() - this.lastThrow > 800) {
+    if (this.world.keyboard.ATTACK && this.bottles > 0 && Date.now() - this.lastThrow > 1200) {
       let bottle = new ThrowableObject(
         this.x + 20,
         this.y + 120,

@@ -61,7 +61,7 @@ class Finalboss extends MovableObject {
     this.loadImages(this.IMAGES_HURT);
     this.loadImages(this.IMAGES_DEAD);
     this.x = 700 * 3.25 - 195;
-    this.speed = 10;
+    this.speed = 15;
     this.animate();
   }
 
@@ -131,10 +131,10 @@ class Finalboss extends MovableObject {
   }
   
   /**
-   * Reduces the boss's energy by 14. Minimum value is 0.
+   * Reduces the boss's energy by 20. Minimum value is 0.
    */
   hit() {
-    this.energy -= 14;
+    this.energy -= 20;
     if (this.energy < 0) this.energy = 0;
   }
 }
