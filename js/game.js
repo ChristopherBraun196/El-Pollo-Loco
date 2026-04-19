@@ -19,7 +19,7 @@ function init() {
   canvas = document.getElementById("canvas");
   world = new World(canvas, keyboard);
   initMusic();
-  initTouchControls()
+  initTouchControls();
 }
 
 /**
@@ -27,15 +27,23 @@ function init() {
  */
 function toggleSound() {
   soundMuted = !soundMuted;
-  let img = document.getElementById("muteIcon");
-  let text = document.getElementById("muteText");
-
   if (soundMuted) {
     music.pause();
+    snoringSound.pause();
+  } else {
+    music.play();
+  }
+  localStorage.setItem("soundMuted", soundMuted);
+  updateMuteButton();
+}
+
+function updateMuteButton() {
+  let img = document.getElementById("muteIcon");
+  let text = document.getElementById("muteText");
+  if (soundMuted) {
     img.src = "./assets/img/svg/no_sound.svg";
     text.innerText = "Sound OFF";
   } else {
-    music.play();
     img.src = "./assets/img/svg/sound_on.svg";
     text.innerText = "Sound ON";
   }
@@ -45,6 +53,7 @@ function toggleSound() {
  * Initializes all game sounds.
  */
 function initMusic() {
+  soundMuted = localStorage.getItem("soundMuted") === "true";
   initBackgroundSound();
   inithurtSound();
   initChickenDeadSound();
@@ -52,7 +61,8 @@ function initMusic() {
   initBossFightSound();
   initWinSound();
   initLoseSound();
-  initSnoringSound() 
+  initSnoringSound();
+  updateMuteButton();
 }
 
 /**
@@ -130,7 +140,7 @@ function initLoseSound() {
 function initSnoringSound() {
   snoringSound = new Audio("assets/music/sounds/366866__tianve8__snoring.wav");
   snoringSound.loop = true;
-  snoringSound.volume = 0.3;
+  snoringSound.volume = 0.4;
 }
 
 /**
@@ -147,39 +157,58 @@ function initTouchControls() {
  * Binds touch events for the left movement button.
  */
 function initTouchLeft() {
-  let btn = document.querySelector('#touch-controls-left button:nth-child(1)');
-  btn.addEventListener('touchstart', () => keyboard.LEFT = true);
-  btn.addEventListener('touchend', () => keyboard.LEFT = false);
+  let btn = document.querySelector("#touch-controls-left button:nth-child(1)");
+  btn.addEventListener("contextmenu", (e) => e.preventDefault());
+
+  btn.addEventListener("touchstart", () => {
+    gameStarted = true;
+    keyboard.LEFT = true;
+  });
 }
 
 /**
  * Binds touch events for the right movement button.
  */
 function initTouchRight() {
-  let btn = document.querySelector('#touch-controls-left button:nth-child(2)');
-  btn.addEventListener('touchstart', () => keyboard.RIGHT = true);
-  btn.addEventListener('touchend', () => keyboard.RIGHT = false);
+  let btn = document.querySelector("#touch-controls-left button:nth-child(2)");
+  btn.addEventListener("contextmenu", (e) => e.preventDefault());
+
+  btn.addEventListener("touchstart", () => {
+    gameStarted = true;
+    keyboard.RIGHT = true;
+  });
 }
 
 /**
  * Binds touch events for the jump button.
  */
 function initTouchJump() {
-  let btn = document.querySelector('#touch-controls-right button:nth-child(1)');
-  btn.addEventListener('touchstart', () => keyboard.SPACE = true);
-  btn.addEventListener('touchend', () => keyboard.SPACE = false);
+  let btn = document.querySelector("#touch-controls-right button:nth-child(1)");
+  btn.addEventListener("contextmenu", (e) => e.preventDefault());
+
+  btn.addEventListener("touchstart", () => {
+    gameStarted = true;
+    keyboard.SPACE = true;
+  });
 }
 
 /**
  * Binds touch events for the attack button.
  */
 function initTouchAttack() {
-  let btn = document.querySelector('#touch-controls-right button:nth-child(2)');
-  btn.addEventListener('touchstart', () => keyboard.ATTACK = true);
-  btn.addEventListener('touchend', () => keyboard.ATTACK = false);
+  let btn = document.querySelector("#touch-controls-right button:nth-child(2)");
+  btn.addEventListener("contextmenu", (e) => e.preventDefault());
+
+  btn.addEventListener("touchstart", () => {
+    gameStarted = true;
+    keyboard.ATTACK = true;
+  });
+
+  btn.addEventListener("touchend", () => (keyboard.ATTACK = false));
 }
 
 window.addEventListener("keydown", (e) => {
+  gameStarted = true;
   if (e.key === "ArrowRight" || e.key === "d") {
     keyboard.RIGHT = true;
   }

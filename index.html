@@ -12,8 +12,11 @@
     <link rel="stylesheet" href="./style.css" />
   </head>
   <body
-    onload="init(); checkRestart();rotateScreen();">
-    
+    onload="
+      init();
+      rotateScreen();
+    "
+  >
     <h1>El Pollo Loco</h1>
 
     <div id="fullscreen">
@@ -33,7 +36,7 @@
         </button>
       </div>
 
-      <canvas id="canvas" width="720" height="480"></canvas>
+      <canvas id="canvas" width="720" height="480" tabindex="0"></canvas>
 
       <div id="touch-controls">
         <div id="touch-controls-left">

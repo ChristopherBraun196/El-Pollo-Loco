@@ -24,7 +24,7 @@ class Character extends MovableObject {
   deadImageIndex = 0;
 
   /** @type {{top: number, bottom: number, left: number, right: number}} Hitbox offsets. */
-  offset = { top: 100, bottom: 10, left: 1, right: 1 };
+  offset = { top: 100, bottom: 10, left: 30, right: 30 };
 
   /** @type {number} Number of coins collected. */
   coins = 0;
@@ -229,7 +229,7 @@ class Character extends MovableObject {
         this.otherDirection,
       );
       this.world.throwableObjects.push(bottle);
-      this.bottles--;
+      this.bottles -= 0.5;
       this.world.bottleBar.setPercentage(this.bottles * 12.5);
       this.world.keyboard.ATTACK = false;
       this.lastMoveTime = Date.now();

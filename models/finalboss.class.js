@@ -107,7 +107,7 @@ class Finalboss extends MovableObject {
    * Activates the boss when Pepe is within 300px.
    */
   checkActivation() {
-    if (this.world && Math.abs(this.x - this.world.character.x) < 300) {
+    if (this.world && Math.abs(this.x - this.world.character.x) < 500) {
       this.isActivated = true;
     }
   }
@@ -134,7 +134,7 @@ class Finalboss extends MovableObject {
    * Reduces the boss's energy by 34. Minimum value is 0.
    */
   hit() {
-    this.energy -= 34;
+    this.energy -= 14;
     if (this.energy < 0) this.energy = 0;
   }
 }

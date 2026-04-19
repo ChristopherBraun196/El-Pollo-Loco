@@ -20,7 +20,7 @@ class Bottle extends MovableObject {
     super().loadImage(this.IMAGES_BOTTLE[0]);
     this.loadImages(this.IMAGES_BOTTLE);
     this.x = x;
-    this.y = 340;
+    this.y = 360;
     this.animate();
   }
 

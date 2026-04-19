@@ -260,9 +260,14 @@ class World {
     this.ctx.translate(-this.camera_x, 0);
     const self = this;
 
-    requestAnimationFrame(function () {
+    this.animationFrameId = requestAnimationFrame(function () {
       self.draw();
     });
+  }
+
+  stop() {
+    clearInterval(this.runInterval);
+    cancelAnimationFrame(this.animationFrameId);
   }
 
   statusBars() {
@@ -299,5 +304,6 @@ class World {
     } else {
       this.ctx.drawImage(mo.img, mo.x, mo.y, mo.width, mo.height);
     }
+    // mo.drawFrame(this.ctx);
   }
 }

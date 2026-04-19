@@ -76,8 +76,8 @@ function impressumTemplate() {
  * Hides the start screen and starts the game.
  */
 function startGame() {
-  gameStarted = true;
-  document.activeElement.blur();
+  canvas.focus();
+  if (!soundMuted) music.play();
   document.getElementById("start-screen").style.display = "none";
   document.getElementById("startButton").style.display = "none";
 }
@@ -86,17 +86,16 @@ function startGame() {
  * Reloads the page and starts the game directly via URL parameter.
  */
 function restartGame() {
-  window.location.href = window.location.pathname + "?restart=true";
-}
-
-/**
- * Checks if a restart was triggered via URL parameter and starts the game directly.
- */
-function checkRestart() {
-  if (new URLSearchParams(window.location.search).get("restart")) {
-    startGame();
-    window.history.replaceState({}, "", window.location.pathname);
-  }
+  world.stop();
+  level1 = createLevel1();
+  keyboard.LEFT = keyboard.RIGHT = keyboard.SPACE = keyboard.ATTACK = false;
+  world = new World(canvas, keyboard);
+  document.getElementById("screen-game-over").style.display = "none";
+  document.getElementById("screen-you-win").style.display = "none";
+  document.getElementById("restartButton").style.display = "none";
+  document.getElementById("homeButton").style.display = "none";
+  gameStarted = false;
+  if (!soundMuted) music.play();
 }
 
 /**
